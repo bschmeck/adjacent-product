@@ -1,7 +1,7 @@
 require_relative "../window_generator.rb"
 
 RSpec.describe WindowGenerator do
-  let(:digits) { (1..10).to_a.shuffle }
+  let(:digits) { (1..10).to_a }
   let(:window_size) { 4 }
 
   subject(:generator) { WindowGenerator.new digits, window_size }
@@ -13,15 +13,19 @@ RSpec.describe WindowGenerator do
 
     WindowGenerator::STRATEGIES.each do |strategy|
       context "when strategy is #{strategy}" do
-        it "yields each window to a given block" do
-          # 10 digits = 7 windows
-          count = 0
-          generator.via(strategy) { count += 1 }
-          expect(count).to eq 7
-        end
-
         it "yields unique objects" do
           expect(generator.via(strategy).to_a.uniq.count).to eq 7
+        end
+
+        it "yields the correct windows" do
+          enum = generator.via(strategy)
+          expect(enum.next).to eq [1,2,3,4]
+          expect(enum.next).to eq [2,3,4,5]
+          expect(enum.next).to eq [3,4,5,6]
+          expect(enum.next).to eq [4,5,6,7]
+          expect(enum.next).to eq [5,6,7,8]
+          expect(enum.next).to eq [6,7,8,9]
+          expect(enum.next).to eq [7,8,9,10]
         end
       end
     end
