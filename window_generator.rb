@@ -1,5 +1,5 @@
 class WindowGenerator
-  STRATEGIES = [:clone, :new_array, :concat]
+  STRATEGIES = [:clone, :new_array, :concat, :slice]
 
   def initialize(arr, window_size)
     @arr = arr
@@ -41,6 +41,14 @@ class WindowGenerator
       yield prefix + [elt]
       prefix << elt
       prefix.delete_at 0
+    end
+  end
+
+  def via_slice
+    return to_enum(__callee__) unless block_given?
+    n_windows = arr.size - window_size + 1
+    n_windows.times do |i|
+      yield arr.slice(i, window_size)
     end
   end
 
