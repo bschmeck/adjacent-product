@@ -6,6 +6,10 @@ class WindowGenerator
     @window_size = window_size
   end
 
+  def windows(&block)
+    via(:slice, &block)
+  end
+
   def via(strategy, &block)
     unless STRATEGIES.include? strategy
       fail ArgumentError, "Unsupported option #{strategy.inspect.to_s}"
