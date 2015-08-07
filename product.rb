@@ -10,15 +10,6 @@ digits = Array.new(n_digits) { prng.rand 10 }
 
 max_prod = 0
 
-def windows(arr, window_size)
-  return to_enum(__callee__, arr, window_size) unless block_given?
-  prefix = arr.slice(0, window_size-1)
-  arr[(window_size-1)..-1].each do |elt|
-    prefix << elt
-    yield prefix #.clone
-    prefix.delete_at 0
-  end
-end
 
 puts digits.inspect.to_s
 
