@@ -10,5 +10,20 @@ RSpec.describe WindowGenerator do
     it "fails for unknown strategies" do
       expect { generator.via(:foobar) }.to raise_error(ArgumentError)
     end
+
+    WindowGenerator::STRATEGIES.each do |strategy|
+      context "when strategy is #{strategy}" do
+        it "yields each window to a given block" do
+          # 10 digits = 7 windows
+          count = 0
+          generator.via(strategy) { count += 1 }
+          expect(count).to eq 7
+        end
+
+        it "yields unique objects" do
+          expect(generator.via(strategy).to_a.uniq.count).to eq 7
+        end
+      end
+    end
   end
 end
